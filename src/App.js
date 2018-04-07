@@ -8,26 +8,28 @@ import 'rc-slider/assets/index.css';
 
 class App extends Component {
 
+
+
   constructor(props) {
   super(props);
+  this.marks = {
+    0:'5PM',
+    1:'6PM',
+    2:'7PM',
+    3:'8PM',
+    4:'9PM',
+    5:'10PM',
+    6:'11PM',
+    7:'12AM',
+    8:'1AM',
+    9:'2AM',
+    10:'3AM',
+    11:'4AM',
+  }
   this.state = {
     value: [0, 5, 11],
-    marks: {
-      0:'5PM',
-      1:'6PM',
-      2:'7PM',
-      3:'8PM',
-      4:'9PM',
-      5:'10PM',
-      6:'11PM',
-      7:'12AM',
-      8:'1AM',
-      9:'2AM',
-      10:'3AM',
-      11:'4AM',
-    },
-    };
   }
+}
 
   onSliderChange = (value) => {
     console.log(value);
@@ -43,9 +45,9 @@ class App extends Component {
           <div className="main-container">
             <Paper className="calc-container" zDepth={2}>
               <div className="info-display">
-                <div className="info-item"><h4>Start Time</h4><h2>{this.state.value[0]}</h2></div>
-                <div className="info-item"><h4>Bed Time</h4> <h2>{this.state.value[1]}</h2></div>
-                <div className="info-item"><h4>End Time</h4> <h2>{this.state.value[2]}</h2></div>
+                <div className="info-item"><h4>Start Time</h4><h2>{this.marks[this.state.value[0]]}</h2></div>
+                <div className="info-item"><h4>Bed Time</h4> <h2>{this.marks[this.state.value[1]]}</h2></div>
+                <div className="info-item"><h4>End Time</h4> <h2>{this.marks[this.state.value[2]]}</h2></div>
               </div>
               <Range
                 className="range-select"
@@ -53,7 +55,7 @@ class App extends Component {
                 min={0}
                 max={11}
                 allowCross={false}
-                marks={this.state.marks}
+                marks={this.marks}
                 defaultValue={this.state.value}
                 handleStyle={[{ backgroundColor: 'yellow' }, { backgroundColor: 'gray' }, {backgroundColor: 'green' }]}
                 onChange={this.onSliderChange}  ></Range>
