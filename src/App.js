@@ -12,6 +12,9 @@ class App extends Component {
 
   constructor(props) {
   super(props);
+  this.startCost = 12;
+  this.bedtimeCost = 8;
+  this.midnightCost = 16;
   this.marks = {
     0:'5PM',
     1:'6PM',
@@ -28,7 +31,27 @@ class App extends Component {
   }
   this.state = {
     value: [0, 5, 11],
+    fare: 0,
   }
+}
+
+calculateFare = ()=> {
+  let startHours = 0;
+  let bedtimeHours = 0;
+  let midnightHours = 0;
+
+  startHours = (this.state.value[1] - this.state.value[0]) * this.startCost;
+  bedtimeHours = (7 - this.state.value[1]) * this.bedtimeCost;
+  midnightHours = (this.state.value[2] - 7) * this.midnightCost;
+
+  let totalCost = startHours + bedtimeHours + midnightHours;
+
+  console.log(totalCost);
+
+  this.setState({
+    fare: totalCost
+  });
+
 }
 
   onSliderChange = (value) => {
@@ -36,6 +59,7 @@ class App extends Component {
     this.setState({
       value,
     });
+    this.calculateFare();
   }
 
   render() {
@@ -44,6 +68,9 @@ class App extends Component {
       <div className="App">
           <div className="main-container">
             <Paper className="calc-container" zDepth={2}>
+              <div className="fare-display">
+                ${this.state.fare}
+              </div>
               <div className="info-display">
                 <div className="info-item"><h4>Start Time</h4><h2>{this.marks[this.state.value[0]]}</h2></div>
                 <div className="info-item"><h4>Bed Time</h4> <h2>{this.marks[this.state.value[1]]}</h2></div>
