@@ -6,13 +6,13 @@ import "./App.scss";
 import "rc-slider/assets/index.css";
 
 class App extends Component {
+  componentDidMount = () => {
+    //shows initial fare total based on where slider locations are
+    this.calculateFare();
+  };
+
   constructor(props) {
     super(props);
-
-    componentDidMount = () => {
-      //shows initial fare total based on where slider locations are
-      this.calculateFare();
-    };
 
     //store cost values of different kinds of hours (could be useful if we need to customize it later on)
     this.startCost = 12;
