@@ -35,17 +35,68 @@ class App extends Component {
   }
 }
 
+moreThanZero =(firstNum, secondNum)=> {
+  if((firstNum - secondNum) > 0){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
 calculateFare = ()=> {
   let startHours = 0;
   let bedtimeHours = 0;
   let midnightHours = 0;
+console.log(this.state.value);
 
-  startHours = (this.state.value[1] - this.state.value[0]) * this.startCost;
-  bedtimeHours = (7 - this.state.value[1]) * this.bedtimeCost;
-  midnightHours = (this.state.value[2] - 7) * this.midnightCost;
+  if(this.state.value[1] >=8){
+    //bed time is after midnight for some reason
+    startHours = (7 - this.state.value[0]) * this.startCost;
+    if(this.state.value[0] >= 8){
+      startHours = 0;
+    }
+  }
+  else{
+    startHours = (this.state.value[1] - this.state.value[0]) * this.startCost;
+  }
+
+
+
+
+  if(this.moreThanZero(7, this.state.value[1]) && this.state.value[1] <= 7){
+
+
+
+      bedtimeHours = (7 - this.state.value[1]) * this.bedtimeCost;
+
+
+  }
+  else{
+    bedtimeHours = 0;
+  }
+
+
+  if(this.moreThanZero(this.state.value[2], 7)){
+    console.log(this.state.value[2] - 7);
+
+    if(this.state.value[0] >= 8){
+      midnightHours = (this.state.value[2] - this.state.value[0]) * this.midnightCost;
+    }
+    else{
+      midnightHours = (this.state.value[2] - 7) * this.midnightCost;
+    }
+
+  }
+  else{
+    console.log("midnight not calculated");
+    midnightHours = 0;
+  }
+
 
   let totalCost = startHours + bedtimeHours + midnightHours;
 
+  console.log(startHours + " start " + bedtimeHours + " bedtime " + midnightHours + " midnight ");
   console.log(totalCost);
 
   this.setState({
@@ -58,8 +109,10 @@ calculateFare = ()=> {
     console.log(value);
     this.setState({
       value,
+    }, ()=>{
+      this.calculateFare();
     });
-    this.calculateFare();
+
   }
 
   render() {
