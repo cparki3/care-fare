@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 class App extends Component {
 
-
+  componentDidMount = ()=> {
+      this.calculateFare();
+      // set el height and width etc.
+  }
 
   constructor(props) {
   super(props);
@@ -119,15 +122,17 @@ console.log(this.state.value);
     return (
       <MuiThemeProvider>
       <div className="App">
+          <div className="logo-container"></div>
           <div className="main-container">
             <Paper className="calc-container" zDepth={2}>
               <div className="fare-display">
-                ${this.state.fare}
+                <h4>Total Fare</h4>
+                <h1>${this.state.fare}</h1>
               </div>
               <div className="info-display">
-                <div className="info-item"><h4>Start Time</h4><h2>{this.marks[this.state.value[0]]}</h2></div>
-                <div className="info-item"><h4>Bed Time</h4> <h2>{this.marks[this.state.value[1]]}</h2></div>
-                <div className="info-item"><h4>End Time</h4> <h2>{this.marks[this.state.value[2]]}</h2></div>
+                <div className="info-item start"><h4>Start Time</h4><h2>{this.marks[this.state.value[0]]}</h2></div>
+                <div className="info-item bedtime"><h4>Bed Time</h4> <h2>{this.marks[this.state.value[1]]}</h2></div>
+                <div className="info-item end"><h4>End Time</h4> <h2>{this.marks[this.state.value[2]]}</h2></div>
               </div>
               <Range
                 className="range-select"
@@ -137,13 +142,18 @@ console.log(this.state.value);
                 allowCross={false}
                 marks={this.marks}
                 defaultValue={this.state.value}
-                handleStyle={[{ backgroundColor: 'yellow' }, { backgroundColor: 'gray' }, {backgroundColor: 'green' }]}
+                handleStyle={[{ backgroundColor: '#E36D60', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px' }
+                , { backgroundColor: '#9C4638', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px'  },
+                 {backgroundColor: '#33223B', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px'  }]}
+                trackStyle={[{backgroundColor: '#E36D60'},{backgroundColor: '#9C4638'},{backgroundColor: '#33223B'}]}
+                railStyle={{ backgroundColor: '#CCC' }}
                 onChange={this.onSliderChange}  ></Range>
             </Paper>
           </div>
       </div>
     </MuiThemeProvider>
     );
+    this.calculateFare();
   }
 }
 

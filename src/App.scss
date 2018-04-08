@@ -1,0 +1,95 @@
+
+
+$color-fare:#ED8F5B;
+$color-start:#E36D60;
+$color-bedtime:#9C4638;
+$color-end:#33223B;
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-image: url('./images/care_fare_bg.jpg');
+  height: 100%;
+  overflow: hidden;
+}
+
+
+.logo-container{
+  margin:0 auto;
+  width:578px;
+  height:139px;
+  background-image: url('./images/care_fare_logo.png');
+  margin-top: 70px;
+}
+
+.main-container{
+  width:100%;
+  padding: 60px;
+  max-width: 1000px;
+  min-width: 750px;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  .calc-container{
+    padding: 60px;
+
+  }
+
+  .fare-display{
+    text-align: center;
+    color: $color-fare;
+    h4{
+      font-size: 30px;
+      font-weight: 300;
+      margin:0px;
+    }
+    h1{
+      font-size: 100px;
+      margin: 0px;
+    }
+  }
+
+  .info-display{
+    display: flex;
+    justify-content:space-between;
+
+    .start{
+      color: $color-start;
+    }
+    .bedtime{
+      color: $color-bedtime;
+
+    }
+    .end{
+      color: $color-end;
+    }
+
+    .info-item{
+      margin:20px;
+      font-weight: 300;
+      text-align: center;
+
+      h2{
+        padding:0px;
+        font-size: 60px;
+        margin: 0px;
+      }
+
+    }
+
+  }
+
+  .range-select{
+    margin-top: 40px;
+    margin-bottom: 20px;
+    .rc-slider-dot{
+      display: none !important;
+    }
+    .rc-slider-mark-text{
+      margin-top: 5px;
+    }
+  }
+
+}
