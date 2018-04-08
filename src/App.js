@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
-import logo from './logo.svg';
-import './App.scss';
 import Slider, { Range } from 'rc-slider';
+import './App.scss';
 import 'rc-slider/assets/index.css';
 
 class App extends Component {
 
   componentDidMount = ()=> {
+      //shows initial fare total based on where slider locations are
       this.calculateFare();
-      // set el height and width etc.
   }
 
   constructor(props) {
   super(props);
+  //store cost values of different kinds of hours (could be useful if we need to customize it later on)
   this.startCost = 12;
   this.bedtimeCost = 8;
   this.midnightCost = 16;
+
+  //range slider works on a range from 0 - 11... midnight is 7 in this case
+  this.midnight = 7;
+
+  //defines mark locations and label text
   this.marks = {
     0:'5PM',
     1:'6PM',
@@ -32,90 +37,77 @@ class App extends Component {
     10:'3AM',
     11:'4AM',
   }
+
+  //style for the handles in the react slider component
+  this.handleStyle = [
+      { backgroundColor: '#E36D60', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px' },
+      { backgroundColor: '#9C4638', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px'  },
+      {backgroundColor: '#33223B', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px'  }
+   ];
+
+   //style for the track in the react slider component
+   this.trackStyle = [
+     {backgroundColor: '#E36D60'},
+     {backgroundColor: '#9C4638'},
+     {backgroundColor: '#33223B'}
+   ];
+
+   //style for the rail in the react slider component
+   this.railStyle = {
+      backgroundColor: '#CCC'
+   }
+
+  //sets initial state values
   this.state = {
     value: [0, 5, 11],
     fare: 0,
   }
 }
 
-moreThanZero =(firstNum, secondNum)=> {
-  if((firstNum - secondNum) > 0){
-    return true;
-  }
-  else{
-    return false;
-  }
-}
 
+//where the magic happens to calculate the fare for the sitter
 calculateFare = ()=> {
+  //intial values to track hours used in final calculation
   let startHours = 0;
   let bedtimeHours = 0;
   let midnightHours = 0;
-console.log(this.state.value);
 
-  if(this.state.value[1] >=8){
-    //bed time is after midnight for some reason
-    startHours = (7 - this.state.value[0]) * this.startCost;
-    if(this.state.value[0] >= 8){
-      startHours = 0;
+  //assigns slider locations to more meaningful varibles
+  let startVal = this.state.value[0];
+  let bedtimeVal = this.state.value[1];
+  let endVal = this.state.value[2];
+
+  //get initial count of hours expected in calculation
+  let totalHours = endVal - startVal;
+  let totalCost = 0;
+
+  for(let i = startVal; i < endVal; i++){
+    //check for startTime hours
+    if(i < this.midnight && i < bedtimeVal){
+      totalCost += this.startCost;
+    }
+    //check for bedtime hours
+    if(i > bedtimeVal && i <= this.midnight){
+      totalCost += this.bedtimeCost;
+    }
+    //check for hours after midnight
+    if(i > this.midnight){
+      totalCost += this.midnightCost
     }
   }
-  else{
-    startHours = (this.state.value[1] - this.state.value[0]) * this.startCost;
-  }
-
-
-
-
-  if(this.moreThanZero(7, this.state.value[1]) && this.state.value[1] <= 7){
-
-
-
-      bedtimeHours = (7 - this.state.value[1]) * this.bedtimeCost;
-
-
-  }
-  else{
-    bedtimeHours = 0;
-  }
-
-
-  if(this.moreThanZero(this.state.value[2], 7)){
-    console.log(this.state.value[2] - 7);
-
-    if(this.state.value[0] >= 8){
-      midnightHours = (this.state.value[2] - this.state.value[0]) * this.midnightCost;
-    }
-    else{
-      midnightHours = (this.state.value[2] - 7) * this.midnightCost;
-    }
-
-  }
-  else{
-    console.log("midnight not calculated");
-    midnightHours = 0;
-  }
-
-
-  let totalCost = startHours + bedtimeHours + midnightHours;
-
-  console.log(startHours + " start " + bedtimeHours + " bedtime " + midnightHours + " midnight ");
-  console.log(totalCost);
 
   this.setState({
     fare: totalCost
   });
-
 }
 
+  //updates values of the slider component when it is changed by the end user
   onSliderChange = (value) => {
-    console.log(value);
     this.setState({
       value,
-    }, ()=>{
+      }, ()=>{
       this.calculateFare();
     });
-
   }
 
   render() {
@@ -142,18 +134,15 @@ console.log(this.state.value);
                 allowCross={false}
                 marks={this.marks}
                 defaultValue={this.state.value}
-                handleStyle={[{ backgroundColor: '#E36D60', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px' }
-                , { backgroundColor: '#9C4638', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px'  },
-                 {backgroundColor: '#33223B', border: 'none', height: '20px', width:'20px', marginLeft:'-10px', marginTop:'-9px'  }]}
-                trackStyle={[{backgroundColor: '#E36D60'},{backgroundColor: '#9C4638'},{backgroundColor: '#33223B'}]}
-                railStyle={{ backgroundColor: '#CCC' }}
+                handleStyle={this.handleStyle}
+                trackStyle={this.trackStyle}
+                railStyle={this.railStyle}
                 onChange={this.onSliderChange}  ></Range>
             </Paper>
           </div>
       </div>
     </MuiThemeProvider>
     );
-    this.calculateFare();
   }
 }
 
